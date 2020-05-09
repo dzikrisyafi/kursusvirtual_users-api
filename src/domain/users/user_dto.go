@@ -3,7 +3,7 @@ package users
 import (
 	"strings"
 
-	"github.com/dzikrisyafi/kursusvirtual_users-api/src/utils/errors"
+	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_errors"
 )
 
 const (
@@ -25,19 +25,9 @@ type User struct {
 	DateCreated  string `json:"date_created"`
 }
 
-type UserRole struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
-}
-
-type UserDepartment struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
-}
-
 type Users []User
 
-func (user *User) Validate() *errors.RestErr {
+func (user *User) Validate() rest_errors.RestErr {
 	user.Username = strings.TrimSpace(strings.ToLower(user.Username))
 	user.Firstname = strings.TrimSpace(user.Firstname)
 	user.Surname = strings.TrimSpace(user.Surname)
@@ -45,14 +35,13 @@ func (user *User) Validate() *errors.RestErr {
 	user.Password = strings.TrimSpace(user.Password)
 
 	if user.Username == "" {
-		return errors.NewBadRequestError("invalid username")
+		return rest_errors.NewBadRequestError("invalid username")
 	}
 	if user.Password == "" {
-		return errors.NewBadRequestError("invalid password")
+		if len(user.Password) < 8 {
+			return rest_errors.NewBadRequestError("the password must have at least 8 characters")
+		}
+		return rest_errors.NewBadRequestError("invalid password")
 	}
-	if user.Email == "" {
-		return errors.NewBadRequestError("invalid email address")
-	}
-
 	return nil
 }

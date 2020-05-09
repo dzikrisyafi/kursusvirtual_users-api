@@ -3,8 +3,8 @@ package services
 import (
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/domain/users"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/utils/crypto_utils"
-	"github.com/dzikrisyafi/kursusvirtual_users-api/src/utils/date_utils"
-	"github.com/dzikrisyafi/kursusvirtual_users-api/src/utils/errors"
+	"github.com/dzikrisyafi/kursusvirtual_utils-go/date_utils"
+	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_errors"
 )
 
 var (
@@ -14,16 +14,16 @@ var (
 type usersService struct{}
 
 type usersServiceInterface interface {
-	CreateUser(users.User) (*users.User, *errors.RestErr)
-	UpdateUser(bool, users.User) (*users.User, *errors.RestErr)
-	GetAllUser() (users.Users, *errors.RestErr)
-	GetUser(int64) (*users.User, *errors.RestErr)
-	DeleteUser(int64) *errors.RestErr
-	SearchUser(string) (users.Users, *errors.RestErr)
-	LoginUser(users.LoginRequest) (*users.User, *errors.RestErr)
+	CreateUser(users.User) (*users.User, rest_errors.RestErr)
+	UpdateUser(bool, users.User) (*users.User, rest_errors.RestErr)
+	GetAllUser() (users.Users, rest_errors.RestErr)
+	GetUser(int64) (*users.User, rest_errors.RestErr)
+	DeleteUser(int64) rest_errors.RestErr
+	SearchUser(string) (users.Users, rest_errors.RestErr)
+	LoginUser(users.LoginRequest) (*users.User, rest_errors.RestErr)
 }
 
-func (s *usersService) CreateUser(user users.User) (*users.User, *errors.RestErr) {
+func (s *usersService) CreateUser(user users.User) (*users.User, rest_errors.RestErr) {
 	if err := user.Validate(); err != nil {
 		return nil, err
 	}
@@ -38,12 +38,12 @@ func (s *usersService) CreateUser(user users.User) (*users.User, *errors.RestErr
 	return &user, nil
 }
 
-func (s *usersService) GetAllUser() (users.Users, *errors.RestErr) {
+func (s *usersService) GetAllUser() (users.Users, rest_errors.RestErr) {
 	dao := &users.User{}
 	return dao.GetAllUser()
 }
 
-func (s *usersService) GetUser(userID int64) (*users.User, *errors.RestErr) {
+func (s *usersService) GetUser(userID int64) (*users.User, rest_errors.RestErr) {
 	result := &users.User{ID: userID}
 	if err := result.Get(); err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func (s *usersService) GetUser(userID int64) (*users.User, *errors.RestErr) {
 	return result, nil
 }
 
-func (s *usersService) UpdateUser(isPartial bool, user users.User) (*users.User, *errors.RestErr) {
+func (s *usersService) UpdateUser(isPartial bool, user users.User) (*users.User, rest_errors.RestErr) {
 	current, err := s.GetUser(user.ID)
 	if err != nil {
 		return nil, err
@@ -97,20 +97,20 @@ func (s *usersService) UpdateUser(isPartial bool, user users.User) (*users.User,
 	return current, nil
 }
 
-func (s *usersService) DeleteUser(userID int64) *errors.RestErr {
+func (s *usersService) DeleteUser(userID int64) rest_errors.RestErr {
 	user := &users.User{ID: userID}
 	return user.Delete()
 }
 
-func (s *usersService) SearchUser(status string) (users.Users, *errors.RestErr) {
+func (s *usersService) SearchUser(status string) (users.Users, rest_errors.RestErr) {
 	dao := &users.User{}
 	return dao.FindByStatus(status)
 }
 
-func (s *usersService) LoginUser(req users.LoginRequest) (*users.User, *errors.RestErr) {
+func (s *usersService) LoginUser(req users.LoginRequest) (*users.User, rest_errors.RestErr) {
 	user := &users.User{Username: req.Username}
 
-	// check if username and password is not empty
+	// validate username and password
 	if err := req.Validate(); err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (s *usersService) LoginUser(req users.LoginRequest) (*users.User, *errors.R
 		Password: crypto_utils.GetPasswordHash(req.Password, user.Salt),
 	}
 
-	// check username and password
+	// get user by username and password
 	if err := dao.FindByUsernameAndPassword(); err != nil {
 		return nil, err
 	}
