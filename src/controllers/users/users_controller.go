@@ -21,17 +21,6 @@ func getUserId(userIdParam string) (int64, rest_errors.RestErr) {
 }
 
 func Create(c *gin.Context) {
-	if err := oauth.AuthenticateRequest(c.Request); err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-
-	if userID := oauth.GetCallerID(c.Request); userID == 0 {
-		restErr := rest_errors.NewUnauthorizedError("invalid credentials")
-		c.JSON(restErr.Status(), restErr)
-		return
-	}
-
 	var user users.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		restErr := rest_errors.NewBadRequestError("invalid json body")
@@ -49,17 +38,6 @@ func Create(c *gin.Context) {
 }
 
 func GetAll(c *gin.Context) {
-	if err := oauth.AuthenticateRequest(c.Request); err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-
-	if userID := oauth.GetCallerID(c.Request); userID == 0 {
-		restErr := rest_errors.NewUnauthorizedError("invalid credentials")
-		c.JSON(restErr.Status(), restErr)
-		return
-	}
-
 	users, err := services.UsersService.GetAllUser()
 	if err != nil {
 		c.JSON(err.Status(), err)
@@ -95,17 +73,6 @@ func Get(c *gin.Context) {
 }
 
 func Update(c *gin.Context) {
-	if err := oauth.AuthenticateRequest(c.Request); err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-
-	if userID := oauth.GetCallerID(c.Request); userID == 0 {
-		restErr := rest_errors.NewUnauthorizedError("invalid credentials")
-		c.JSON(restErr.Status(), restErr)
-		return
-	}
-
 	userID, userErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
 	if userErr != nil {
 		restErr := rest_errors.NewBadRequestError("user id should be a number")
@@ -154,17 +121,6 @@ func Delete(c *gin.Context) {
 }
 
 func Search(c *gin.Context) {
-	if err := oauth.AuthenticateRequest(c.Request); err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-
-	if userID := oauth.GetCallerID(c.Request); userID == 0 {
-		restErr := rest_errors.NewUnauthorizedError("invalid credentials")
-		c.JSON(restErr.Status(), restErr)
-		return
-	}
-
 	status := c.Query("status")
 	users, err := services.UsersService.SearchUser(status)
 	if err != nil {

@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/dzikrisyafi/kursusvirtual_oauth-go/oauth"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/domain/enrolls"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/services"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_errors"
@@ -12,17 +11,6 @@ import (
 )
 
 func Get(c *gin.Context) {
-	if err := oauth.AuthenticateRequest(c.Request); err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-
-	if userID := oauth.GetCallerID(c.Request); userID == 0 {
-		restErr := rest_errors.NewUnauthorizedError("invalid credentials")
-		c.JSON(restErr.Status(), restErr)
-		return
-	}
-
 	courseID, err := strconv.ParseInt(c.Param("course_id"), 10, 64)
 	if err != nil {
 		restErr := rest_errors.NewBadRequestError("course id should be a number")
@@ -38,18 +26,7 @@ func Get(c *gin.Context) {
 }
 
 func Create(c *gin.Context) {
-	if err := oauth.AuthenticateRequest(c.Request); err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-
-	if userID := oauth.GetCallerID(c.Request); userID == 0 {
-		restErr := rest_errors.NewUnauthorizedError("invalid credentials")
-		c.JSON(restErr.Status(), restErr)
-		return
-	}
-
-	var request enrolls.EnrollRequest
+	var request enrolls.Enroll
 	if err := c.ShouldBindJSON(&request); err != nil {
 		restErr := rest_errors.NewBadRequestError("invalid json body")
 		c.JSON(restErr.Status(), restErr)

@@ -1,23 +1,32 @@
 package app
 
 import (
+	"github.com/dzikrisyafi/kursusvirtual_middleware/middleware"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/enrolls"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/users"
 )
 
 func mapUrls() {
-	// user end point
-	router.POST("/users", users.Create)
-	router.GET("/users", users.GetAll)
-	router.GET("/users/:user_id", users.Get)
-	router.PUT("/users/:user_id", users.Update)
-	router.PATCH("/users/:user_id", users.Update)
-	router.DELETE("/users/:user_id", users.Delete)
-
-	router.GET("/internal/users/search", users.Search)
 	router.POST("/users/login", users.Login)
 
-	// enroll end point
-	router.GET("/internal/enrolls/:course_id", enrolls.Get)
-	router.POST("/internal/enrolls", enrolls.Create)
+	// users group end point
+	usersGroup := router.Group("/users")
+	usersGroup.Use(middleware.Auth())
+	{
+		usersGroup.POST("/", users.Create)
+		usersGroup.GET("/", users.GetAll)
+		usersGroup.GET("/:user_id", users.Get)
+		usersGroup.PUT("/:user_id", users.Update)
+		usersGroup.PATCH("/:user_id", users.Update)
+		usersGroup.DELETE("/:user_id", users.Delete)
+	}
+
+	// internal end point
+	internalGroup := router.Group("/internal")
+	internalGroup.Use(middleware.Auth())
+	{
+		router.GET("/internal/users/search", users.Search)
+		router.GET("/internal/enrolls/:course_id", enrolls.Get)
+		router.POST("/internal/enrolls", enrolls.Create)
+	}
 }

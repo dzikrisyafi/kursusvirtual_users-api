@@ -42,7 +42,7 @@ func (course *Course) FindUserByCourseID() rest_errors.RestErr {
 	return nil
 }
 
-func (enroll *EnrollRequest) Save() rest_errors.RestErr {
+func (enroll *Enroll) Save() rest_errors.RestErr {
 	stmt, err := users_db.DbConn().Prepare(queryInsertEnroll)
 	if err != nil {
 		logger.Error("error when trying to prepare save enroll statement", err)

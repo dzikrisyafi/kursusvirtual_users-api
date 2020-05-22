@@ -13,7 +13,7 @@ type CourseUser struct {
 	Email     string `json:"email"`
 }
 
-type EnrollRequest struct {
+type Enroll struct {
 	ID       int64  `json:"id"`
 	UserID   int64  `json:"user_id"`
 	CourseID int64  `json:"course_id"`
