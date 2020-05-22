@@ -25,8 +25,8 @@ func mapUrls() {
 	internalGroup := router.Group("/internal")
 	internalGroup.Use(middleware.Auth())
 	{
-		router.GET("/internal/users/search", users.Search)
-		router.GET("/internal/enrolls/:course_id", enrolls.Get)
-		router.POST("/internal/enrolls", enrolls.Create)
+		internalGroup.GET("/internal/users/search", users.Search)
+		internalGroup.GET("/internal/enrolls/:course_id", enrolls.Get)
+		internalGroup.POST("/internal/enrolls", enrolls.Create)
 	}
 }
