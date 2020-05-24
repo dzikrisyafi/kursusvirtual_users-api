@@ -7,6 +7,7 @@ import (
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/domain/enrolls"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/services"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_errors"
+	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_resp"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,7 +23,8 @@ func Get(c *gin.Context) {
 		c.JSON(getErr.Status(), getErr)
 	}
 
-	c.JSON(http.StatusOK, enroll)
+	resp := rest_resp.NewStatusOK("success get data", enroll)
+	c.JSON(resp.Status(), resp)
 }
 
 func Create(c *gin.Context) {

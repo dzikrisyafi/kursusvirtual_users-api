@@ -35,7 +35,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get data user", result.Marshall(false))
+	resp := rest_resp.NewStatusCreated("success get data user", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -96,7 +96,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get data user", result.Marshall(false))
+	resp := rest_resp.NewStatusOK("success get data user", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -132,7 +132,7 @@ func Search(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get data user", users.Marshall(false))
+	resp := rest_resp.NewStatusOK("success get data user", users.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
