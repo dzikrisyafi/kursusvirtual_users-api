@@ -8,6 +8,7 @@ import (
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/domain/users"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/services"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_errors"
+	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_resp"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,7 +35,8 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, result.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("success get data user", result.Marshall(false))
+	c.JSON(resp.Status(), resp)
 }
 
 func GetAll(c *gin.Context) {
@@ -44,15 +46,11 @@ func GetAll(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, users.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("success get data user", users.Marshall(oauth.IsPublic(c.Request)))
+	c.JSON(resp.Status(), resp)
 }
 
 func Get(c *gin.Context) {
-	if err := oauth.AuthenticateRequest(c.Request); err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-
 	userID, idErr := getUserId(c.Param("user_id"))
 	if idErr != nil {
 		c.JSON(idErr.Status(), idErr)
@@ -66,10 +64,13 @@ func Get(c *gin.Context) {
 	}
 
 	if oauth.GetCallerID(c.Request) == user.ID {
-		c.JSON(http.StatusOK, user.Marshall(false))
+		resp := rest_resp.NewStatusOK("success get data user", user.Marshall(false))
+		c.JSON(resp.Status(), resp)
 		return
 	}
-	c.JSON(http.StatusOK, user.Marshall(oauth.IsPublic(c.Request)))
+
+	resp := rest_resp.NewStatusOK("success get data user", user.Marshall(oauth.IsPublic(c.Request)))
+	c.JSON(resp.Status(), resp)
 }
 
 func Update(c *gin.Context) {
@@ -94,7 +95,9 @@ func Update(c *gin.Context) {
 		c.JSON(saveErr.Status(), saveErr)
 		return
 	}
-	c.JSON(http.StatusOK, result.Marshall(oauth.IsPublic(c.Request)))
+
+	resp := rest_resp.NewStatusOK("success get data user", result.Marshall(false))
+	c.JSON(resp.Status(), resp)
 }
 
 func Delete(c *gin.Context) {
@@ -117,7 +120,8 @@ func Delete(c *gin.Context) {
 		c.JSON(err.Status(), err)
 		return
 	}
-	c.JSON(http.StatusOK, map[string]string{"status": "deleted"})
+
+	c.JSON(http.StatusOK, map[string]interface{}{"message": "success delete data user", "status": http.StatusOK})
 }
 
 func Search(c *gin.Context) {
@@ -127,7 +131,9 @@ func Search(c *gin.Context) {
 		c.JSON(err.Status(), err)
 		return
 	}
-	c.JSON(http.StatusOK, users.Marshall(oauth.IsPublic(c.Request)))
+
+	resp := rest_resp.NewStatusOK("success get data user", users.Marshall(false))
+	c.JSON(resp.Status(), resp)
 }
 
 func Login(c *gin.Context) {
@@ -137,10 +143,12 @@ func Login(c *gin.Context) {
 		c.JSON(restErr.Status(), restErr)
 		return
 	}
+
 	user, err := services.UsersService.LoginUser(request)
 	if err != nil {
 		c.JSON(err.Status(), err)
 		return
 	}
+
 	c.JSON(http.StatusOK, user.Marshall(oauth.IsPublic(c.Request)))
 }
