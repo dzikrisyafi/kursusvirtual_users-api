@@ -35,7 +35,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusCreated("success get data user", result.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusCreated("success creating user", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -46,7 +46,7 @@ func GetAll(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get data user", users.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("success get user data", users.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -64,12 +64,12 @@ func Get(c *gin.Context) {
 	}
 
 	if oauth.GetCallerID(c.Request) == user.ID {
-		resp := rest_resp.NewStatusOK("success get data user", user.Marshall(false))
+		resp := rest_resp.NewStatusOK("success get user data", user.Marshall(false))
 		c.JSON(resp.Status(), resp)
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get data user", user.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("success get user data", user.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -96,7 +96,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get data user", result.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("success updating user data", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -121,7 +121,7 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{"message": "success delete data user", "status": http.StatusOK})
+	c.JSON(http.StatusOK, map[string]interface{}{"message": "success deleted user data", "status": http.StatusOK})
 }
 
 func Search(c *gin.Context) {
@@ -132,7 +132,7 @@ func Search(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get data user", users.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("success get user data", users.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
