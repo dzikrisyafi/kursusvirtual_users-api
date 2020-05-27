@@ -35,7 +35,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusCreated("success creating user", result.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusCreated("success creating new user", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -74,10 +74,9 @@ func Get(c *gin.Context) {
 }
 
 func Update(c *gin.Context) {
-	userID, userErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
-	if userErr != nil {
-		restErr := rest_errors.NewBadRequestError("user id should be a number")
-		c.JSON(restErr.Status(), restErr)
+	userID, idErr := getUserId(c.Param("user_id"))
+	if idErr != nil {
+		c.JSON(idErr.Status(), idErr)
 		return
 	}
 
@@ -101,16 +100,6 @@ func Update(c *gin.Context) {
 }
 
 func Delete(c *gin.Context) {
-	if err := oauth.AuthenticateRequest(c.Request); err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-
-	if userID := oauth.GetCallerID(c.Request); userID == 0 {
-		restErr := rest_errors.NewUnauthorizedError("invalid credentials")
-		c.JSON(restErr.Status(), restErr)
-	}
-
 	userID, idErr := getUserId(c.Param("user_id"))
 	if idErr != nil {
 		c.JSON(idErr.Status(), idErr)
