@@ -31,9 +31,10 @@ func (enroll *Enroll) Save() rest_errors.RestErr {
 
 	enrollID, err := insertResult.LastInsertId()
 	if err != nil {
-		return rest_errors.NewInternalServerError("error when trying to save enroll", errors.New("database error"))
+		return rest_errors.NewInternalServerError("error when trying to get last insert id after creating a new role", errors.New("database error"))
 	}
 	enroll.ID = int(enrollID)
+
 	return nil
 }
 

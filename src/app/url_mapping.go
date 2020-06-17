@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/dzikrisyafi/kursusvirtual_middleware/middleware"
+	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/departments"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/enrolls"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/roles"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/users"
@@ -41,5 +42,15 @@ func mapUrls() {
 		rolesGroup.POST("/", roles.Create)
 		rolesGroup.PUT("/:role_id", roles.Update)
 		rolesGroup.DELETE("/:role_id", roles.Delete)
+	}
+
+	departmentsGroup := router.Group("/departments")
+	departmentsGroup.Use(middleware.Auth())
+	{
+		departmentsGroup.POST("/", departments.Create)
+		departmentsGroup.GET("/:department_id", departments.Get)
+		departmentsGroup.GET("/", departments.GetAll)
+		departmentsGroup.PUT("/:department_id", departments.Update)
+		departmentsGroup.DELETE("/:department_id", departments.Delete)
 	}
 }

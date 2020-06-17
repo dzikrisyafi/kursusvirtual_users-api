@@ -3,7 +3,7 @@ package services
 import (
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/domain/users"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/repository/rest"
-	"github.com/dzikrisyafi/kursusvirtual_users-api/src/utils/crypto_utils"
+	"github.com/dzikrisyafi/kursusvirtual_utils-go/crypto_utils"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/date_utils"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_errors"
 )
@@ -50,6 +50,7 @@ func (s *usersService) GetUser(userID int) (*users.User, rest_errors.RestErr) {
 	if err := result.Get(); err != nil {
 		return nil, err
 	}
+
 	return result, nil
 }
 
