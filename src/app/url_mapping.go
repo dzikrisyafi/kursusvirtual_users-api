@@ -19,16 +19,17 @@ func mapUrls() {
 		usersGroup.GET("/:user_id", users.Get)
 		usersGroup.PUT("/:user_id", users.Update)
 		usersGroup.PATCH("/:user_id", users.Update)
-		usersGroup.DELETE("/:user_id", users.Delete)
+		usersGroup.DELETE("/users/:user_id", users.Delete)
 	}
 
 	// internal group end point
 	internalGroup := router.Group("/internal")
 	internalGroup.Use(middleware.Auth())
 	{
-		internalGroup.GET("/internal/users/search", users.Search)
-		internalGroup.GET("/internal/enrolls/:course_id", enrolls.Get)
-		internalGroup.POST("/internal/enrolls", enrolls.Create)
+		internalGroup.GET("/users/search", users.Search)
+		internalGroup.GET("/enrolls/:course_id", enrolls.Get)
+		internalGroup.POST("/enrolls", enrolls.Create)
+		router.DELETE("/enrolls/:enroll_id", enrolls.Delete)
 	}
 
 	// roles group end point

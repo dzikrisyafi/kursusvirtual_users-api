@@ -1,7 +1,7 @@
 package roles
 
 type PublicRole struct {
-	ID int64 `json:"id"`
+	ID int `json:"id"`
 }
 
 func (roles Roles) Marshall(isPublic bool) []interface{} {
@@ -9,6 +9,7 @@ func (roles Roles) Marshall(isPublic bool) []interface{} {
 	for index, role := range roles {
 		result[index] = role.Marshall(isPublic)
 	}
+
 	return result
 }
 
@@ -18,5 +19,6 @@ func (role Role) Marshall(isPublic bool) interface{} {
 			ID: role.ID,
 		}
 	}
+
 	return role
 }

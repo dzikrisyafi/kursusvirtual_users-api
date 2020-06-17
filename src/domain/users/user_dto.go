@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_errors"
+	"golang.org/x/net/html"
 )
 
 const (
@@ -11,13 +12,13 @@ const (
 )
 
 type User struct {
-	ID           int64  `json:"id"`
+	ID           int    `json:"id"`
 	Username     string `json:"username"`
 	Firstname    string `json:"firstname"`
 	Surname      string `json:"surname"`
 	Email        string `json:"email"`
-	RoleID       int64  `json:"role_id"`
-	DepartmentID int64  `json:"department_id"`
+	RoleID       int    `json:"role_id"`
+	DepartmentID int    `json:"department_id"`
 	Salt         string `json:"salt"`
 	Password     string `json:"password"`
 	Image        string `json:"image"`
@@ -28,10 +29,10 @@ type User struct {
 type Users []User
 
 func (user *User) Validate() rest_errors.RestErr {
-	user.Username = strings.TrimSpace(strings.ToLower(user.Username))
-	user.Firstname = strings.TrimSpace(user.Firstname)
-	user.Surname = strings.TrimSpace(user.Surname)
-	user.Email = strings.TrimSpace(strings.ToLower(user.Email))
+	user.Username = html.EscapeString(strings.TrimSpace(strings.ToLower(user.Username)))
+	user.Firstname = html.EscapeString(strings.TrimSpace(user.Firstname))
+	user.Surname = html.EscapeString(strings.TrimSpace(user.Surname))
+	user.Email = html.EscapeString(strings.TrimSpace(strings.ToLower(user.Email)))
 	user.Password = strings.TrimSpace(user.Password)
 
 	if user.Username == "" {
@@ -43,5 +44,6 @@ func (user *User) Validate() rest_errors.RestErr {
 		}
 		return rest_errors.NewBadRequestError("invalid password")
 	}
+
 	return nil
 }

@@ -12,14 +12,14 @@ var (
 type rolesService struct{}
 
 type rolesServiceInterface interface {
-	GetRole(int64) (*roles.Role, rest_errors.RestErr)
+	GetRole(int) (*roles.Role, rest_errors.RestErr)
 	GetAllRole() (roles.Roles, rest_errors.RestErr)
 	CreateRole(roles.Role) (*roles.Role, rest_errors.RestErr)
 	UpdateRole(roles.Role) (*roles.Role, rest_errors.RestErr)
-	DeleteRole(int64) rest_errors.RestErr
+	DeleteRole(int) rest_errors.RestErr
 }
 
-func (s *rolesService) GetRole(roleID int64) (*roles.Role, rest_errors.RestErr) {
+func (s *rolesService) GetRole(roleID int) (*roles.Role, rest_errors.RestErr) {
 	result := &roles.Role{ID: roleID}
 	if err := result.Get(); err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (s *rolesService) UpdateRole(role roles.Role) (*roles.Role, rest_errors.Res
 	return current, nil
 }
 
-func (s *rolesService) DeleteRole(roleID int64) rest_errors.RestErr {
+func (s *rolesService) DeleteRole(roleID int) rest_errors.RestErr {
 	dao := &roles.Role{ID: roleID}
 	return dao.Delete()
 }

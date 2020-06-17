@@ -12,13 +12,14 @@ var (
 type enrollsService struct{}
 
 type enrollsServiceInterface interface {
-	GetUsersByCourseID(int64) (*enrolls.Course, rest_errors.RestErr)
+	GetUsersByCourseID(int) (*enrolls.Course, rest_errors.RestErr)
 	CreateEnroll(enrolls.Enroll) (*enrolls.Enroll, rest_errors.RestErr)
+	DeleteEnroll(int) rest_errors.RestErr
 }
 
-func (s *enrollsService) GetUsersByCourseID(courseID int64) (*enrolls.Course, rest_errors.RestErr) {
+func (s *enrollsService) GetUsersByCourseID(courseID int) (*enrolls.Course, rest_errors.RestErr) {
 	result := &enrolls.Course{CourseID: courseID}
-	if err := result.FindUserByCourseID(); err != nil {
+	if err := result.GetUserByCourseID(); err != nil {
 		return nil, err
 	}
 	return result, nil
@@ -36,4 +37,9 @@ func (s *enrollsService) CreateEnroll(req enrolls.Enroll) (*enrolls.Enroll, rest
 	}
 
 	return dao, nil
+}
+
+func (s *enrollsService) DeleteEnroll(enrollID int) rest_errors.RestErr {
+	dao := &enrolls.Enroll{ID: enrollID}
+	return dao.DeleteEnroll()
 }

@@ -1,7 +1,7 @@
 package enrolls
 
 type PublicEnroll struct {
-	CourseID int64 `json:"course_id"`
+	CourseID int `json:"course_id"`
 }
 
 func (enroll Enroll) Marshall(isPublic bool) interface{} {
@@ -10,5 +10,6 @@ func (enroll Enroll) Marshall(isPublic bool) interface{} {
 			CourseID: enroll.ID,
 		}
 	}
+
 	return enroll
 }

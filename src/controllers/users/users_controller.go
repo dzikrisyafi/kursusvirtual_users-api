@@ -7,6 +7,7 @@ import (
 	"github.com/dzikrisyafi/kursusvirtual_oauth-go/oauth"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/domain/users"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/services"
+	"github.com/dzikrisyafi/kursusvirtual_utils-go/controller_utils"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_errors"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_resp"
 	"github.com/gin-gonic/gin"
@@ -51,7 +52,7 @@ func GetAll(c *gin.Context) {
 }
 
 func Get(c *gin.Context) {
-	userID, idErr := getUserId(c.Param("user_id"))
+	userID, idErr := controller_utils.GetIDInt(c.Param("user_id"), "user id")
 	if idErr != nil {
 		c.JSON(idErr.Status(), idErr)
 		return
@@ -74,7 +75,7 @@ func Get(c *gin.Context) {
 }
 
 func Update(c *gin.Context) {
-	userID, idErr := getUserId(c.Param("user_id"))
+	userID, idErr := controller_utils.GetIDInt(c.Param("user_id"), "user id")
 	if idErr != nil {
 		c.JSON(idErr.Status(), idErr)
 		return
@@ -100,12 +101,13 @@ func Update(c *gin.Context) {
 }
 
 func Delete(c *gin.Context) {
-	userID, idErr := getUserId(c.Param("user_id"))
+	userID, idErr := controller_utils.GetIDInt(c.Param("user_id"), "user id")
 	if idErr != nil {
 		c.JSON(idErr.Status(), idErr)
 		return
 	}
-	if err := services.UsersService.DeleteUser(userID); err != nil {
+
+	if err := services.UsersService.DeleteUser(userID, c.Query("access_token")); err != nil {
 		c.JSON(err.Status(), err)
 		return
 	}

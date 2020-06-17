@@ -2,18 +2,18 @@ package roles
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/dzikrisyafi/kursusvirtual_oauth-go/oauth"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/domain/roles"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/services"
+	"github.com/dzikrisyafi/kursusvirtual_utils-go/controller_utils"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_errors"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_resp"
 	"github.com/gin-gonic/gin"
 )
 
 func Get(c *gin.Context) {
-	roleID, err := strconv.ParseInt(c.Param("role_id"), 10, 64)
+	roleID, err := controller_utils.GetIDInt(c.Param("role_id"), "role id")
 	if err != nil {
 		restErr := rest_errors.NewBadRequestError("role id should be a number")
 		c.JSON(restErr.Status(), restErr)
@@ -60,7 +60,7 @@ func Create(c *gin.Context) {
 }
 
 func Update(c *gin.Context) {
-	roleID, idErr := strconv.ParseInt(c.Param("role_id"), 10, 64)
+	roleID, idErr := controller_utils.GetIDInt(c.Param("role_id"), "role id")
 	if idErr != nil {
 		restErr := rest_errors.NewBadRequestError("role id should be a number")
 		c.JSON(restErr.Status(), restErr)
@@ -86,7 +86,7 @@ func Update(c *gin.Context) {
 }
 
 func Delete(c *gin.Context) {
-	roleID, idErr := strconv.ParseInt(c.Param("role_id"), 10, 64)
+	roleID, idErr := controller_utils.GetIDInt(c.Param("role_id"), "role id")
 	if idErr != nil {
 		restErr := rest_errors.NewBadRequestError("role id should be a number")
 		c.JSON(restErr.Status(), restErr)

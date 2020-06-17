@@ -83,7 +83,7 @@ func (role *Role) Save() rest_errors.RestErr {
 		logger.Error("error when trying to get last insert id after creating a new role", err)
 		return rest_errors.NewInternalServerError("error when trying to save role", errors.New("database error"))
 	}
-	role.ID = roleID
+	role.ID = int(roleID)
 
 	return nil
 }

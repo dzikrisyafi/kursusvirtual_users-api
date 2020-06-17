@@ -3,19 +3,19 @@ package users
 import "encoding/json"
 
 type PublicUser struct {
-	ID          int64  `json:"id"`
+	ID          int    `json:"id"`
 	Status      string `json:"status"`
 	DateCreated string `json:"date_created"`
 }
 
 type PrivateUser struct {
-	ID           int64  `json:"id"`
+	ID           int    `json:"id"`
 	Username     string `json:"username"`
 	Firstname    string `json:"firstname"`
 	Surname      string `json:"surname"`
 	Email        string `json:"email"`
-	RoleID       int64  `json:"role_id"`
-	DepartmentID int64  `json:"department_id"`
+	RoleID       int    `json:"role_id"`
+	DepartmentID int    `json:"department_id"`
 	Image        string `json:"image"`
 	Status       string `json:"status"`
 	DateCreated  string `json:"date_created"`

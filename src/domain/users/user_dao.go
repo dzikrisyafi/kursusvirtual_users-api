@@ -47,7 +47,7 @@ func (user *User) Save() rest_errors.RestErr {
 		logger.Error("error when trying to get last insert id after creating a new user", err)
 		return rest_errors.NewInternalServerError("error when trying to save user", errors.New("database error"))
 	}
-	user.ID = userID
+	user.ID = int(userID)
 
 	return nil
 }
