@@ -4,7 +4,7 @@ import "encoding/json"
 
 type PublicUser struct {
 	ID          int    `json:"id"`
-	Status      string `json:"status"`
+	Status      bool   `json:"status"`
 	DateCreated string `json:"date_created"`
 }
 
@@ -17,7 +17,7 @@ type PrivateUser struct {
 	RoleID       int    `json:"role_id"`
 	DepartmentID int    `json:"department_id"`
 	Image        string `json:"image"`
-	Status       string `json:"status"`
+	Status       bool   `json:"status"`
 	DateCreated  string `json:"date_created"`
 }
 

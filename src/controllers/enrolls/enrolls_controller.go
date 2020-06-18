@@ -18,12 +18,12 @@ func Get(c *gin.Context) {
 		c.JSON(restErr.Status(), restErr)
 	}
 
-	enroll, getErr := services.EnrollsService.GetUsersByCourseID(courseID)
+	result, getErr := services.EnrollsService.GetUsersByCourseID(courseID)
 	if getErr != nil {
 		c.JSON(getErr.Status(), getErr)
 	}
 
-	resp := rest_resp.NewStatusOK("success get data", enroll)
+	resp := rest_resp.NewStatusOK("success get data", result)
 	c.JSON(resp.Status(), resp)
 }
 
@@ -35,13 +35,13 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	enroll, err := services.EnrollsService.CreateEnroll(request)
+	result, err := services.EnrollsService.CreateEnroll(request)
 	if err != nil {
 		c.JSON(err.Status(), err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, enroll)
+	c.JSON(http.StatusCreated, result)
 }
 
 func Delete(c *gin.Context) {

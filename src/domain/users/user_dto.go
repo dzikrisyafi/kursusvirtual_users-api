@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	StatusActive = "active"
+	StatusActive = false
+	DefaultImage = "default.jpg"
 )
 
 type User struct {
@@ -22,7 +23,7 @@ type User struct {
 	Salt         string `json:"salt"`
 	Password     string `json:"password"`
 	Image        string `json:"image"`
-	Status       string `json:"status"`
+	Status       bool   `json:"status"`
 	DateCreated  string `json:"date_created"`
 }
 
@@ -38,10 +39,12 @@ func (user *User) Validate() rest_errors.RestErr {
 	if user.Username == "" {
 		return rest_errors.NewBadRequestError("invalid username")
 	}
+
 	if user.Password == "" {
 		if len(user.Password) < 8 {
 			return rest_errors.NewBadRequestError("the password must have at least 8 characters")
 		}
+
 		return rest_errors.NewBadRequestError("invalid password")
 	}
 

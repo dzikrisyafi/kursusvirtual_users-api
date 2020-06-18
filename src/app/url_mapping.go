@@ -15,34 +15,45 @@ func mapUrls() {
 	usersGroup := router.Group("/users")
 	usersGroup.Use(middleware.Auth())
 	{
-		usersGroup.POST("/", users.Create)
-		usersGroup.GET("/", users.GetAll)
-		usersGroup.GET("/:user_id", users.Get)
-		usersGroup.PUT("/:user_id", users.Update)
-		usersGroup.PATCH("/:user_id", users.Update)
-		usersGroup.DELETE("/users/:user_id", users.Delete)
+		// usersGroup.POST("/", users.Create)
+		// usersGroup.GET("/:user_id", users.Get)
+		// usersGroup.GET("/", users.GetAll)
+		// usersGroup.PUT("/:user_id", users.Update)
+		// usersGroup.PATCH("/:user_id", users.Update)
+		// usersGroup.DELETE("/users/:user_id", users.Delete)
 	}
+	router.POST("/users/", users.Create)
+	router.GET("/users/:user_id", users.Get)
+	router.GET("/users/", users.GetAll)
+	router.PUT("/users/:user_id", users.Update)
+	router.PATCH("/users/:user_id", users.Update)
+	router.DELETE("/users/:user_id", users.Delete)
 
 	// internal group end point
 	internalGroup := router.Group("/internal")
 	internalGroup.Use(middleware.Auth())
 	{
-		internalGroup.GET("/users/search", users.Search)
-		internalGroup.GET("/enrolls/:course_id", enrolls.Get)
 		internalGroup.POST("/enrolls", enrolls.Create)
-		router.DELETE("/enrolls/:enroll_id", enrolls.Delete)
+		internalGroup.GET("/enrolls/:course_id", enrolls.Get)
+		internalGroup.DELETE("/enrolls/:enroll_id", enrolls.Delete)
 	}
 
 	// roles group end point
 	rolesGroup := router.Group("/roles")
 	rolesGroup.Use(middleware.Auth())
 	{
-		rolesGroup.GET("/:role_id", roles.Get)
-		rolesGroup.GET("/", roles.GetAll)
-		rolesGroup.POST("/", roles.Create)
-		rolesGroup.PUT("/:role_id", roles.Update)
-		rolesGroup.DELETE("/:role_id", roles.Delete)
+		// rolesGroup.GET("/:role_id", roles.Get)
+		// rolesGroup.GET("/", roles.GetAll)
+		// rolesGroup.POST("/", roles.Create)
+		// rolesGroup.PUT("/:role_id", roles.Update)
+		// rolesGroup.DELETE("/:role_id", roles.Delete)
 	}
+
+	router.POST("/roles/", roles.Create)
+	router.GET("/roles/:role_id", roles.Get)
+	router.GET("/roles/", roles.GetAll)
+	router.PUT("/roles/:role_id", roles.Update)
+	router.DELETE("/roles/:role_id", roles.Delete)
 
 	departmentsGroup := router.Group("/departments")
 	departmentsGroup.Use(middleware.Auth())

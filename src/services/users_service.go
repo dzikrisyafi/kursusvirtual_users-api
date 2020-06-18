@@ -20,7 +20,6 @@ type usersServiceInterface interface {
 	GetAllUser() (users.Users, rest_errors.RestErr)
 	GetUser(int) (*users.User, rest_errors.RestErr)
 	DeleteUser(int, string) rest_errors.RestErr
-	SearchUser(string) (users.Users, rest_errors.RestErr)
 	LoginUser(users.LoginRequest) (*users.User, rest_errors.RestErr)
 }
 
@@ -31,9 +30,10 @@ func (s *usersService) CreateUser(user users.User) (*users.User, rest_errors.Res
 
 	user.Salt = crypto_utils.SaltText()
 	user.Password = crypto_utils.GetPasswordHash(user.Password, user.Salt)
+	user.Image = users.DefaultImage
 	user.Status = users.StatusActive
 	user.DateCreated = date_utils.GetNowDBFormat()
-	if err := user.Save(); err != nil {
+	if err := user.Save(0); err != nil {
 		return nil, err
 	}
 
@@ -60,6 +60,13 @@ func (s *usersService) UpdateUser(isPartial bool, user users.User) (*users.User,
 		return nil, err
 	}
 
+	var status int
+	if user.Status {
+		status = 1
+	} else {
+		status = 0
+	}
+
 	if isPartial {
 		if user.Username != "" {
 			current.Username = user.Username
@@ -77,6 +84,14 @@ func (s *usersService) UpdateUser(isPartial bool, user users.User) (*users.User,
 			current.Email = user.Email
 		}
 
+		if user.RoleID > 0 {
+			current.RoleID = user.RoleID
+		}
+
+		if user.DepartmentID > 0 {
+			current.DepartmentID = user.DepartmentID
+		}
+
 		if user.Password != "" {
 			current.Salt = crypto_utils.SaltText()
 			current.Password = crypto_utils.GetPasswordHash(user.Password, current.Salt)
@@ -84,6 +99,10 @@ func (s *usersService) UpdateUser(isPartial bool, user users.User) (*users.User,
 
 		if user.Image != "" {
 			current.Image = user.Image
+		}
+
+		if status == 0 || status == 1 {
+			current.Status = user.Status
 		}
 	} else {
 		if err := user.Validate(); err != nil {
@@ -94,14 +113,17 @@ func (s *usersService) UpdateUser(isPartial bool, user users.User) (*users.User,
 		current.Firstname = user.Firstname
 		current.Surname = user.Surname
 		current.Email = user.Email
+		current.RoleID = user.RoleID
+		current.DepartmentID = user.DepartmentID
 		current.Salt = crypto_utils.SaltText()
 		current.Password = crypto_utils.GetPasswordHash(user.Password, current.Salt)
 		current.Image = user.Image
 	}
 
-	if err := current.Update(); err != nil {
+	if err := current.Update(status); err != nil {
 		return nil, err
 	}
+
 	return current, nil
 }
 
@@ -113,11 +135,6 @@ func (s *usersService) DeleteUser(userID int, at string) rest_errors.RestErr {
 	}
 
 	return user.Delete()
-}
-
-func (s *usersService) SearchUser(status string) (users.Users, rest_errors.RestErr) {
-	dao := &users.User{}
-	return dao.FindByStatus(status)
 }
 
 func (s *usersService) LoginUser(req users.LoginRequest) (*users.User, rest_errors.RestErr) {
