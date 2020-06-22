@@ -12,6 +12,7 @@ import (
 const (
 	queryInsertEnroll      = `INSERT INTO enrolls (user_id, course_id, cohort_id) VALUES (?, ?, ?);`
 	queryGetUserByCourseID = `SELECT user_id, username, firstname, surname, email FROM enrolls INNER JOIN users ON user_id=users.id WHERE course_id=?;`
+	queryUpdateEnroll      = `UPDATE enrolls SET user_id=?, course_id=?, cohort_id=? WHERE user_id=? AND course_id=?;`
 	queryDeleteEnroll      = `DELETE FROM enrolls WHERE id=?;`
 )
 
@@ -23,7 +24,7 @@ func (enroll *Enroll) Save() rest_errors.RestErr {
 	}
 	defer stmt.Close()
 
-	insertResult, saveErr := stmt.Exec(enroll.UserID, enroll.CourseID, enroll.Cohort)
+	insertResult, saveErr := stmt.Exec(enroll.UserID, enroll.CourseID, enroll.CohortID)
 	if saveErr != nil {
 		logger.Error("error when trying to save enroll", saveErr)
 		return rest_errors.NewInternalServerError("error when trying to save enroll", errors.New("database error"))
@@ -63,6 +64,28 @@ func (course *Course) GetUserByCourseID() rest_errors.RestErr {
 	if len(course.Users) == 0 {
 		return rest_errors.NewNotFoundError(fmt.Sprintf("no users matching given course id %d", course.CourseID))
 	}
+
+	return nil
+}
+
+func (enroll *Enroll) Update() rest_errors.RestErr {
+	stmt, err := users_db.DbConn().Prepare(queryUpdateEnroll)
+	if err != nil {
+		logger.Error("error when trying to prepare update enroll by user and course id statement", err)
+		return rest_errors.NewInternalServerError("error when trying to update enroll", errors.New("database error"))
+	}
+
+	updateResult, err := stmt.Exec(enroll.UserID, enroll.CourseID, enroll.CohortID, enroll.UserID, enroll.CourseID)
+	if err != nil {
+		logger.Error("error when trying to update enroll by user and course id", err)
+		return rest_errors.NewInternalServerError("error when trying to update enroll", errors.New("database error"))
+	}
+
+	enrollID, err := updateResult.LastInsertId()
+	if err != nil {
+		return rest_errors.NewInternalServerError("error when trying to get last insert id after updating enroll", errors.New("database error"))
+	}
+	enroll.ID = int(enrollID)
 
 	return nil
 }

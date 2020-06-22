@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/dzikrisyafi/kursusvirtual_middleware/middleware"
+	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/cohort"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/departments"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/enrolls"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/roles"
@@ -23,15 +24,6 @@ func mapUrls() {
 		usersGroup.DELETE("/users/:user_id", users.Delete)
 	}
 
-	// internal group end point
-	internalGroup := router.Group("/internal")
-	internalGroup.Use(middleware.Auth())
-	{
-		internalGroup.POST("/enrolls", enrolls.Create)
-		internalGroup.GET("/enrolls/:course_id", enrolls.Get)
-		internalGroup.DELETE("/enrolls/:enroll_id", enrolls.Delete)
-	}
-
 	// roles group end point
 	rolesGroup := router.Group("/roles")
 	rolesGroup.Use(middleware.Auth())
@@ -43,6 +35,7 @@ func mapUrls() {
 		rolesGroup.DELETE("/:role_id", roles.Delete)
 	}
 
+	// departmentsGroup
 	departmentsGroup := router.Group("/departments")
 	departmentsGroup.Use(middleware.Auth())
 	{
@@ -52,4 +45,21 @@ func mapUrls() {
 		departmentsGroup.PUT("/:department_id", departments.Update)
 		departmentsGroup.DELETE("/:department_id", departments.Delete)
 	}
+
+	// internal group end point
+	internalGroup := router.Group("/internal")
+	internalGroup.Use(middleware.Auth())
+	{
+		internalGroup.POST("/enrolls", enrolls.Create)
+		internalGroup.GET("/enrolls/:course_id", enrolls.Get)
+		internalGroup.PUT("/enrolls/:user_id/:course_id", enrolls.Update)
+		internalGroup.DELETE("/enrolls/:enroll_id", enrolls.Delete)
+
+		internalGroup.POST("/cohorts", cohort.Create)
+		internalGroup.GET("/cohorts/:cohort_id", cohort.Get)
+		internalGroup.GET("/cohorts", cohort.GetAll)
+		internalGroup.PUT("/cohorts/:cohort_id", cohort.Update)
+		internalGroup.DELETE("/cohorts/:cohort_id", cohort.Delete)
+	}
+
 }

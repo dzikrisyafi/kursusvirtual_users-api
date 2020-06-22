@@ -15,8 +15,7 @@ import (
 func Get(c *gin.Context) {
 	roleID, err := controller_utils.GetIDInt(c.Param("role_id"), "role id")
 	if err != nil {
-		restErr := rest_errors.NewBadRequestError("role id should be a number")
-		c.JSON(restErr.Status(), restErr)
+		c.JSON(err.Status(), err)
 		return
 	}
 
@@ -26,7 +25,7 @@ func Get(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get role data", role.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("success get role", role.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -37,7 +36,7 @@ func GetAll(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get role data", roles.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("success get role", roles.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -55,15 +54,14 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusCreated("success creating new role", result.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusCreated("success created role", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
 func Update(c *gin.Context) {
 	roleID, idErr := controller_utils.GetIDInt(c.Param("role_id"), "role id")
 	if idErr != nil {
-		restErr := rest_errors.NewBadRequestError("role id should be a number")
-		c.JSON(restErr.Status(), restErr)
+		c.JSON(idErr.Status(), idErr)
 		return
 	}
 
@@ -81,15 +79,14 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success updating role data", result.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("success updated role", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
 func Delete(c *gin.Context) {
 	roleID, idErr := controller_utils.GetIDInt(c.Param("role_id"), "role id")
 	if idErr != nil {
-		restErr := rest_errors.NewBadRequestError("role id should be a number")
-		c.JSON(restErr.Status(), restErr)
+		c.JSON(idErr.Status(), idErr)
 		return
 	}
 
@@ -98,5 +95,5 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{"message": "success deleted role user data", "status": http.StatusOK})
+	c.JSON(http.StatusOK, map[string]interface{}{"message": "success deleted role", "status": http.StatusOK})
 }

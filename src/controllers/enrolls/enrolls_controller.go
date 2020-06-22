@@ -14,8 +14,7 @@ import (
 func Get(c *gin.Context) {
 	courseID, err := controller_utils.GetIDInt(c.Param("course_id"), "course id")
 	if err != nil {
-		restErr := rest_errors.NewBadRequestError("course id should be a number")
-		c.JSON(restErr.Status(), restErr)
+		c.JSON(err.Status(), err)
 	}
 
 	result, getErr := services.EnrollsService.GetUsersByCourseID(courseID)
@@ -42,6 +41,37 @@ func Create(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, result)
+}
+
+func Update(c *gin.Context) {
+	userID, err := controller_utils.GetIDInt(c.Param("user_id"), "user id")
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
+	courseID, err := controller_utils.GetIDInt(c.Param("course_id"), "course id")
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
+	var request enrolls.Enroll
+	if err := c.ShouldBindJSON(&request); err != nil {
+		restErr := rest_errors.NewBadRequestError("invalid json body")
+		c.JSON(restErr.Status(), restErr)
+		return
+	}
+
+	request.UserID = userID
+	request.CourseID = courseID
+	result, err := services.EnrollsService.UpdateEnrollByUserIDAndCourseID(request)
+	if err != nil {
+		c.JSON(err.Status(), err)
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
 }
 
 func Delete(c *gin.Context) {

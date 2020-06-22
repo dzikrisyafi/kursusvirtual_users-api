@@ -3,6 +3,7 @@ package departments
 import (
 	"net/http"
 
+	"github.com/dzikrisyafi/kursusvirtual_oauth-go/oauth"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/domain/departments"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/services"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/controller_utils"
@@ -25,7 +26,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusCreated("success created department", result)
+	resp := rest_resp.NewStatusCreated("success created department", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -42,7 +43,7 @@ func Get(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get department", result)
+	resp := rest_resp.NewStatusOK("success get department", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -53,7 +54,7 @@ func GetAll(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get department", result)
+	resp := rest_resp.NewStatusOK("success get department", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -78,7 +79,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success updated department", result)
+	resp := rest_resp.NewStatusOK("success updated department", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
