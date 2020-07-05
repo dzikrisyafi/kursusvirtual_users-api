@@ -15,14 +15,16 @@ func Get(c *gin.Context) {
 	courseID, err := controller_utils.GetIDInt(c.Param("course_id"), "course id")
 	if err != nil {
 		c.JSON(err.Status(), err)
+		return
 	}
 
 	result, getErr := services.EnrollsService.GetUsersByCourseID(courseID)
 	if getErr != nil {
 		c.JSON(getErr.Status(), getErr)
+		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get data", result)
+	resp := rest_resp.NewStatusOK("success get user", result)
 	c.JSON(resp.Status(), resp)
 }
 
@@ -44,13 +46,7 @@ func Create(c *gin.Context) {
 }
 
 func Update(c *gin.Context) {
-	userID, err := controller_utils.GetIDInt(c.Param("user_id"), "user id")
-	if err != nil {
-		c.JSON(err.Status(), err)
-		return
-	}
-
-	courseID, err := controller_utils.GetIDInt(c.Param("course_id"), "course id")
+	enrollID, err := controller_utils.GetIDInt(c.Param("enroll_id"), "enroll id")
 	if err != nil {
 		c.JSON(err.Status(), err)
 		return
@@ -63,9 +59,8 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	request.UserID = userID
-	request.CourseID = courseID
-	result, err := services.EnrollsService.UpdateEnrollByUserIDAndCourseID(request)
+	request.ID = enrollID
+	result, err := services.EnrollsService.UpdateEnroll(request)
 	if err != nil {
 		c.JSON(err.Status(), err)
 		return

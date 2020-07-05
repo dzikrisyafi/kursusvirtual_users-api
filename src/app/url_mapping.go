@@ -21,7 +21,7 @@ func mapUrls() {
 		usersGroup.GET("/", users.GetAll)
 		usersGroup.PUT("/:user_id", users.Update)
 		usersGroup.PATCH("/:user_id", users.Update)
-		usersGroup.DELETE("/users/:user_id", users.Delete)
+		usersGroup.DELETE("/:user_id", users.Delete)
 	}
 
 	// roles group end point
@@ -52,7 +52,7 @@ func mapUrls() {
 	{
 		internalGroup.POST("/enrolls", enrolls.Create)
 		internalGroup.GET("/enrolls/:course_id", enrolls.Get)
-		internalGroup.PUT("/enrolls/:user_id/:course_id", enrolls.Update)
+		internalGroup.PUT("/enrolls/:enroll_id", enrolls.Update)
 		internalGroup.DELETE("/enrolls/:enroll_id", enrolls.Delete)
 
 		internalGroup.POST("/cohorts", cohort.Create)

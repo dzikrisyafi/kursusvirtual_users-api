@@ -117,7 +117,7 @@ func (s *usersService) UpdateUser(isPartial bool, user users.User) (*users.User,
 		current.DepartmentID = user.DepartmentID
 		current.Salt = crypto_utils.SaltText()
 		current.Password = crypto_utils.GetPasswordHash(user.Password, current.Salt)
-		current.Image = user.Image
+		current.Image = users.DefaultImage
 	}
 
 	if err := current.Update(status); err != nil {

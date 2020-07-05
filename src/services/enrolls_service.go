@@ -14,7 +14,7 @@ type enrollsService struct{}
 type enrollsServiceInterface interface {
 	GetUsersByCourseID(int) (*enrolls.Course, rest_errors.RestErr)
 	CreateEnroll(enrolls.Enroll) (*enrolls.Enroll, rest_errors.RestErr)
-	UpdateEnrollByUserIDAndCourseID(enrolls.Enroll) (*enrolls.Enroll, rest_errors.RestErr)
+	UpdateEnroll(enrolls.Enroll) (*enrolls.Enroll, rest_errors.RestErr)
 	DeleteEnroll(int) rest_errors.RestErr
 }
 
@@ -44,12 +44,13 @@ func (s *enrollsService) CreateEnroll(req enrolls.Enroll) (*enrolls.Enroll, rest
 	return dao, nil
 }
 
-func (s *enrollsService) UpdateEnrollByUserIDAndCourseID(req enrolls.Enroll) (*enrolls.Enroll, rest_errors.RestErr) {
+func (s *enrollsService) UpdateEnroll(req enrolls.Enroll) (*enrolls.Enroll, rest_errors.RestErr) {
 	if err := req.Validate(); err != nil {
 		return nil, err
 	}
 
 	dao := &enrolls.Enroll{
+		ID:       req.ID,
 		UserID:   req.UserID,
 		CourseID: req.CourseID,
 		CohortID: req.CohortID,

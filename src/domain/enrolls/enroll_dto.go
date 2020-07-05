@@ -15,6 +15,8 @@ type CourseUser struct {
 	Firstname string `json:"firstname"`
 	Surname   string `json:"surname"`
 	Email     string `json:"email"`
+	CohortID  int    `json:"cohort_id"`
+	Cohort    string `json:"cohort"`
 }
 
 type Enroll struct {
