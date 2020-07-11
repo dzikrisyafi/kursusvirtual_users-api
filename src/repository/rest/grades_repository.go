@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_errors"
-	"github.com/golang-restclient/rest"
+	"github.com/mercadolibre/golang-restclient/rest"
 )
 
 var (
