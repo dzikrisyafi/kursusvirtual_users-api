@@ -25,7 +25,7 @@ func Get(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get role", role.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("success get role data", role.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -36,7 +36,7 @@ func GetAll(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get role", roles.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("success get role data", roles.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 

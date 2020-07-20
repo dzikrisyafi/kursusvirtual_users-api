@@ -28,14 +28,14 @@ func mapUrls() {
 	rolesGroup := router.Group("/roles")
 	rolesGroup.Use(middleware.Auth())
 	{
+		rolesGroup.POST("/", roles.Create)
 		rolesGroup.GET("/:role_id", roles.Get)
 		rolesGroup.GET("/", roles.GetAll)
-		rolesGroup.POST("/", roles.Create)
 		rolesGroup.PUT("/:role_id", roles.Update)
 		rolesGroup.DELETE("/:role_id", roles.Delete)
 	}
 
-	// departmentsGroup
+	// departments group end point
 	departmentsGroup := router.Group("/departments")
 	departmentsGroup.Use(middleware.Auth())
 	{
@@ -62,4 +62,5 @@ func mapUrls() {
 		internalGroup.DELETE("/cohorts/:cohort_id", cohort.Delete)
 	}
 
+	// TODO: adding role access menu end point
 }
