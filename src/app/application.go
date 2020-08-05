@@ -14,7 +14,7 @@ func StartApplication() {
 	router.Use(cors.New(cors.Config{
 		AllowAllOrigins: true,
 		AllowMethods:    []string{"OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"},
-		AllowHeaders:    []string{"Origin", "Content-Type", "Content-Length"},
+		AllowHeaders:    []string{"Origin", "Authorization", "Content-Type", "Content-Length"},
 	}))
 	mapUrls()
 
