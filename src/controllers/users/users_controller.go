@@ -26,7 +26,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusCreated("success created new user", result.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusCreated("Success created new user", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -44,12 +44,12 @@ func Get(c *gin.Context) {
 	}
 
 	if oauth.GetCallerID(c.Request) == result.ID {
-		resp := rest_resp.NewStatusOK("success get user data", result.Marshall(false))
+		resp := rest_resp.NewStatusOK("Success get user data", result.Marshall(false))
 		c.JSON(resp.Status(), resp)
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get user data", result.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("Success get user data", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -60,7 +60,7 @@ func GetAll(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success get user data", result.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("Success get user data", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -86,7 +86,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	resp := rest_resp.NewStatusOK("success updated user data", result.Marshall(oauth.IsPublic(c.Request)))
+	resp := rest_resp.NewStatusOK("Success updated user", result.Marshall(oauth.IsPublic(c.Request)))
 	c.JSON(resp.Status(), resp)
 }
 
@@ -102,7 +102,7 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{"message": "success deleted user data", "status": http.StatusOK})
+	c.JSON(http.StatusOK, map[string]interface{}{"message": "Success deleted user", "status": http.StatusOK})
 }
 
 func Login(c *gin.Context) {

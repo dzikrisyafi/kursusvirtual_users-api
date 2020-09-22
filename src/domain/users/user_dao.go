@@ -65,6 +65,9 @@ func (user *User) Get() rest_errors.RestErr {
 	result := stmt.QueryRow(user.ID)
 	var status int
 	if getErr := result.Scan(&user.Username, &user.Firstname, &user.Surname, &user.Email, &user.RoleID, &user.DepartmentID, &user.Image, &status, &user.DateCreated); getErr != nil {
+		if strings.Contains(getErr.Error(), "no rows") {
+			return rest_errors.NewNotFoundError("no user found with given id")
+		}
 		logger.Error("error when trying to get user by id", getErr)
 		return rest_errors.NewInternalServerError("error when trying to get user", errors.New("database error"))
 	}

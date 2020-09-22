@@ -62,6 +62,7 @@ func Update(c *gin.Context) {
 	roleID, idErr := controller_utils.GetIDInt(c.Param("role_id"), "role id")
 	if idErr != nil {
 		c.JSON(idErr.Status(), idErr)
+
 		return
 	}
 

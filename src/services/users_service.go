@@ -2,7 +2,6 @@ package services
 
 import (
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/domain/users"
-	"github.com/dzikrisyafi/kursusvirtual_users-api/src/repository/rest"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/crypto_utils"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/date_utils"
 	"github.com/dzikrisyafi/kursusvirtual_utils-go/rest_errors"
@@ -130,9 +129,9 @@ func (s *usersService) UpdateUser(isPartial bool, user users.User) (*users.User,
 func (s *usersService) DeleteUser(userID int, at string) rest_errors.RestErr {
 	user := &users.User{ID: userID}
 
-	if err := rest.GradesRepository.DeleteGrades(userID, at); err != nil {
-		return err
-	}
+	// if err := rest.GradesRepository.DeleteGrades(userID, at); err != nil {
+	// 	return err
+	// }
 
 	return user.Delete()
 }

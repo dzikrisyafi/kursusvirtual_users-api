@@ -5,7 +5,9 @@ import (
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/cohort"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/departments"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/enrolls"
+	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/menu"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/roles"
+	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/submenu"
 	"github.com/dzikrisyafi/kursusvirtual_users-api/src/controllers/users"
 )
 
@@ -46,6 +48,27 @@ func mapUrls() {
 		departmentsGroup.DELETE("/:department_id", departments.Delete)
 	}
 
+	menuGroup := router.Group("/menu")
+	menuGroup.Use(middleware.Auth())
+	{
+		menuGroup.POST("", menu.Create)
+		menuGroup.GET("/:menu_id", menu.Get)
+		menuGroup.GET("", menu.GetAll)
+		menuGroup.PUT("/:menu_id", menu.Update)
+		menuGroup.DELETE("/:menu_id", menu.Delete)
+	}
+
+	submenuGroup := router.Group("/submenu")
+	submenuGroup.Use(middleware.Auth())
+	{
+		submenuGroup.POST("", submenu.Create)
+		submenuGroup.GET("/:submenu_id", submenu.Get)
+		submenuGroup.GET("", submenu.GetAll)
+		submenuGroup.PUT("/:submenu_id", submenu.Update)
+		submenuGroup.PATCH("/:submenu_id", submenu.Update)
+		submenuGroup.DELETE("/:submenu_id", submenu.Delete)
+	}
+
 	// internal group end point
 	internalGroup := router.Group("/internal")
 	internalGroup.Use(middleware.Auth())
@@ -60,6 +83,8 @@ func mapUrls() {
 		internalGroup.GET("/cohorts", cohort.GetAll)
 		internalGroup.PUT("/cohorts/:cohort_id", cohort.Update)
 		internalGroup.DELETE("/cohorts/:cohort_id", cohort.Delete)
+
+		internalGroup.GET("/menu/:role_id", menu.GetAllByRoleID)
 	}
 
 	// TODO: adding role access menu end point

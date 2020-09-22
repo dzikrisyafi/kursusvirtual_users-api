@@ -16,7 +16,7 @@ type departmentsServiceInterface interface {
 	GetDepartment(int) (*departments.Department, rest_errors.RestErr)
 	GetAllDepartment() (departments.Departments, rest_errors.RestErr)
 	UpdateDepartment(departments.Department) (*departments.Department, rest_errors.RestErr)
-	DeleteDepartment(departmentID int) rest_errors.RestErr
+	DeleteDepartment(int) rest_errors.RestErr
 }
 
 func (s *departmentsService) CreateDepartment(department departments.Department) (*departments.Department, rest_errors.RestErr) {
